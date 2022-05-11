@@ -8,6 +8,7 @@ const weatherApi = {
 function App() {
   const [query, setQuery] = useState('');
   const [weather, setWeather] = useState({})
+  const [forcast, setForcast] = useState({})
 
   const search = evt => {
     if(evt.key === "Enter"){
@@ -18,8 +19,16 @@ function App() {
         setWeather(result)
         console.log(result)
       });
+      fetch(`${weatherApi.base}forecast?q=${query}&units=imperial&APPID=${weatherApi.key}`)
+      .then(res => res.json())
+      .then(result => {
+        setQuery('')
+        setForcast(result)
+        console.log(result)
+      });
     }
   }
+
 
   const dateBuilder = (d) => {
     let months = ['January','february','March','April','May','June','July','August','September','October','November','December'];
@@ -45,6 +54,7 @@ function App() {
         
           />
         </div>
+
         {(typeof weather.main != 'undefined') ?(
         <div>
           <div className="locationBox">
@@ -61,6 +71,17 @@ function App() {
           </div>
         </div>
         ) : ('')}
+        
+        <div className='text-white'>
+          {forcast.list[1].main.temp}
+        </div>
+
+                
+              
+                
+              
+        
+    
       </main>
     </div>
   );
