@@ -44,16 +44,15 @@ function App() {
   return (
     <div className="app">
       <main>
-    <div className="search-box">
+      <div className="search-box">
           <input type="text" 
           className='search-bar' 
           placeholder='Enter City...'
           onChange={e => setQuery(e.target.value)}
           value={query}
           onKeyUp={search}
-        
           />
-        </div>
+      </div>
 
         {(typeof weather.main != 'undefined') ?(
         <div>
@@ -72,9 +71,9 @@ function App() {
         </div>
         ) : ('')}
         
-        <div className='text-white'>
+        {/* <div className='text-white'>
           {forcast.list[1].main.temp}
-        </div>
+        </div> */}
 
                 
               
