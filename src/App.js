@@ -6,7 +6,7 @@ const weatherApi = {
 }
 const geoCodeApi ={
   key:"d21dbf4ec7c07da49bc079f1518d953d",
-  base: "http://api.openweathermap.org/geo/1.0/"
+  base: "https://api.openweathermap.org/geo/1.0/"
 }
 function App() {
   const [query, setQuery] = useState('');
@@ -50,9 +50,51 @@ function App() {
 
 
   return (
-    <div className="app">
-        
-      <main className='grid grid-cols-2'>
+    <div className="app ">
+      {/* MOBILE VIEW */}
+      <div className=' md:hidden'>
+      <main className='grid grid-cols-1'>
+        <div className=''>
+          <div className="search-box mt-7">
+            <input type="text" 
+            className='search-bar mt-7 ' 
+            placeholder='Enter City...'
+            onChange={e => setQuery(e.target.value)}
+            value={query}
+            onKeyUp={search}
+            />
+        </div>
+
+        { weather.timezone && 
+          
+          <div>
+            <div className="locationBox">
+              <div className="location">{geoCode[0].name}, {geoCode[0].state} </div>
+              {/* <div className='population'>Poulation: {new Intl.NumberFormat().format(weather.city.population)}</div> */}
+              <div className="date">{ dateBuilder(new Date()) }</div>
+            </div>
+            <div className='weatherBox'>
+            <div className='temp'>
+              {Math.round(weather.daily[0].temp.max)}°F
+            </div>
+            <div className='weather '>
+              {weather.daily[0].weather[0].main}
+            </div>
+            </div>
+          </div>
+          }
+
+        </div>
+
+
+    
+      </main>
+
+      </div>
+
+      {/* DESKTOP VIEW */}
+
+      <main className='hidden md:grid grid-cols-2'>
         <div className=''>
           <div className="search-box mt-7">
             <input type="text" 
@@ -106,16 +148,11 @@ function App() {
           </ul>
         </div>
       
-}     
+        }     
 
-
-        
-                
-              
-        
     
       </main>
-    </div>
+      </div>
   );
 }
 
