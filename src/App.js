@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import rainPic from './assets/rainPic.jpeg'
+import sunPic from './assets/sunPic.webp'
+import snowPic from './assets/snowPic.jpeg'
+import cloudPic from './assets/cloudPic.jpeg'
 
 const weatherApi = {
   key: "d21dbf4ec7c07da49bc079f1518d953d",
@@ -30,6 +34,7 @@ function App() {
         setWeather(result)
         setQuery('')
         console.log(result)
+        
       });
     }
   }
@@ -47,6 +52,20 @@ function App() {
     return `${day} ${date} ${month} ${year}`
   }
 
+  const weatherSet = (weather) => {
+    const weatherStyle = document.querySelector('.app')
+    // const computedStyle = window.getComputedStyle(weatherStyle)
+    if (weather === 'Rain') {
+      weatherStyle.style.setProperty('background-image',`url(${rainPic})`)
+    } else if (weather === 'Clear') {
+      weatherStyle.style.setProperty('background-image',`url(${sunPic})`)
+    } else if (weather === 'Snow') {
+      weatherStyle.style.setProperty('background-image',`url(${snowPic})`)
+    } else if (weather === 'Clouds') {
+      weatherStyle.style.setProperty('background-image',`url(${cloudPic})`)
+
+    }
+  }
 
 
   return (
@@ -78,7 +97,7 @@ function App() {
               {Math.round(weather.daily[0].temp.max)}°F
             </div>
             <div className='weather '>
-              {weather.daily[0].weather[0].main}
+              { weatherSet(weather.daily[0].weather[0].main)}
             </div>
             </div>
           </div>

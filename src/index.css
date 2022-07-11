@@ -14,7 +14,7 @@ body{
 }
 
 .app{
-  background-image: url('./assets/weatherbackground.jpeg');
+  background-image: url('./assets/cloudPic.jpeg');
   background-size: cover;
   background-position: bottom;
   transition: 0.4 ease-out;
