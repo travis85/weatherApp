@@ -94,10 +94,10 @@ function App() {
             </div>
             <div className='weatherBox'>
             <div className='temp'>
-              {Math.round(weather.daily[0].temp.max)}°F
+              {Math.round(weather.current.temp)}°F
             </div>
             <div className='weather '>
-              { weatherSet(weather.daily[0].weather[0].main)}
+              { weatherSet(weather.current.weather[0].main)}
             </div>
             </div>
           </div>
@@ -135,10 +135,10 @@ function App() {
             </div>
             <div className='weatherBox'>
             <div className='temp'>
-              {Math.round(weather.daily[0].temp.max)}°F
+              {Math.round(weather.current.temp)}°F
             </div>
             <div className='weather '>
-              {weather.daily[0].weather[0].main}
+              {weather.current.weather[0].main}
             </div>
             </div>
           </div>
