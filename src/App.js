@@ -3,9 +3,12 @@ import rainPic from './assets/rainPic.jpeg'
 import sunPic from './assets/sunPic.webp'
 import snowPic from './assets/snowPic.jpeg'
 import cloudPic from './assets/cloudPic.jpeg'
+import mistPhoto from './assets/mistPhoto.webp'
+import thunderstormPic from './assets/thunderstormPic.jpeg'
+import Map from './components/Map';
 
 const weatherApi = {
-  key: "d21dbf4ec7c07da49bc079f1518d953d",
+  key: "d21dbf4ec7c07da49bc079f1518d953d",//TODO ,env
   base: "https://api.openweathermap.org/data/2.5/"
 }
 const geoCodeApi ={
@@ -63,12 +66,16 @@ function App() {
       weatherStyle.style.setProperty('background-image',`url(${snowPic})`)
     } else if (weather === 'Clouds') {
       weatherStyle.style.setProperty('background-image',`url(${cloudPic})`)
-
+    } else if (weather === 'Thunderstorm') {
+      weatherStyle.style.setProperty('background-image',`url(${thunderstormPic})`)
+    }else if (weather === 'Mist') {
+      weatherStyle.style.setProperty('background-image',`url(${mistPhoto})`)
     }
   }
 
 
   return (
+    <>
     <div className="app ">
       {/* MOBILE VIEW */}
       <div className=' md:hidden'>
@@ -113,39 +120,48 @@ function App() {
 
       {/* DESKTOP VIEW */}
 
-      <main className='hidden md:grid grid-cols-2'>
+      <main className='hidden md:grid grid-cols-3  '>
+           
         <div className=''>
-          <div className="search-box mt-7">
+           
+          <div className="search-box ">
             <input type="text" 
-            className='search-bar mt-7' 
+            className='search-bar ' 
             placeholder='Enter City...'
             onChange={e => setQuery(e.target.value)}
             value={query}
             onKeyUp={search}
             />
-        </div>
-
-        { weather.timezone && 
+         
+          </div>
+          { weather.timezone && 
           
-          <div>
+          <div className=''>
             <div className="locationBox">
               <div className="location">{geoCode[0].name}, {geoCode[0].state} </div>
-              {/* <div className='population'>Poulation: {new Intl.NumberFormat().format(weather.city.population)}</div> */}
               <div className="date">{ dateBuilder(new Date()) }</div>
             </div>
             <div className='weatherBox'>
-            <div className='temp'>
-              {Math.round(weather.current.temp)}°F
+              <div className='temp'>
+                {Math.round(weather.current.temp)}°F
+              </div>
+              <div className='weather '>
+                {weather.current.weather[0].main}
+              </div>
             </div>
-            <div className='weather '>
-              {weather.current.weather[0].main}
-            </div>
-            </div>
+              
           </div>
-          }
+          
+          }   
+          </div>
+            < Map lat={weather.lat} lng={ weather.lon}/>
+           
+       
+              
+           
+                    
 
-        </div>
-
+ 
       { weather.timezone && 
 
         <div className='flex justify-end'>
@@ -172,6 +188,7 @@ function App() {
     
       </main>
       </div>
+      </>
   );
 }
 
