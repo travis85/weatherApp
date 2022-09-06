@@ -1,10 +1,6 @@
 import React from 'react'
 import { GoogleMap, Marker, useLoadScript} from '@react-google-maps/api';
 
-const containerStyle = {
-  width: '50px',
-  height: '50px',
-}
 
 export default function Map(props) {
   const { isLoaded } = useLoadScript({
@@ -16,15 +12,16 @@ export default function Map(props) {
   if (!isLoaded) return <div>Loading...</div>
 
   return (
-    // <div className='h-48 w-48'>
+    <div className='map border-solid border-2 border-white'>
       <GoogleMap
-        zoom={10}
+        zoom={5}
         center={center}
-        mapContainerClassName={containerStyle}
-        >
+        mapContainerStyle={{ width: "500px", height: "300px" }}>
+      
         <Marker  position={center}/>
+
       </GoogleMap>
-    // </div>
+    </div>
     
   )
 }
