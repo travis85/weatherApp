@@ -41,6 +41,22 @@ function App() {
   }
 
   useEffect(() => {
+    fetch(`${geoCodeApi.base}direct?q=detroit&limit=1&appid=${geoCodeApi.key}`)
+      .then(res => res.json())
+      .then(result => {
+        setGeoCode(result)
+        console.log(geoCode)
+
+        return fetch(`${weatherApi.base}onecall?lat=${result[0].lat}&lon=${result[0].lon}&units=imperial&appid=${weatherApi.key}`)
+
+      })
+      .then(res => res.json())
+      .then(result => {
+        setWeather(result)
+        setQuery('')
+        console.log(result)
+        
+      });
     
   }, [])
 
@@ -101,9 +117,6 @@ function App() {
           </ul>
         </div>
         }     
-
-
-    
       </main>
 
 
