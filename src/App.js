@@ -41,7 +41,7 @@ function App() {
   }
 
   useEffect(() => {
-    fetch(`${geoCodeApi.base}direct?q=detroit&limit=1&appid=${geoCodeApi.key}`)
+    fetch(`${geoCodeApi.base}direct?q=romulus&limit=1&appid=${geoCodeApi.key}`)
       .then(res => res.json())
       .then(result => {
         setGeoCode(result)
