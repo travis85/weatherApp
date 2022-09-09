@@ -3,20 +3,40 @@ import Map from './components/Map';
 import DateBuilder from './utils/DateBuilder'
 import weatherSet from './utils/weatherSet'
 
+//https://openweathermap.org/api
 const weatherApi = {
-  key: 'd21dbf4ec7c07da49bc079f1518d953d',//TODO ,env
+  key: '9d31b566b7835cec15c8ffac25143073',//TODO ,env
   base: "https://api.openweathermap.org/data/2.5/"
 }
 
 const geoCodeApi ={
-  key: 'd21dbf4ec7c07da49bc079f1518d953d',
+  key: '9d31b566b7835cec15c8ffac25143073',
   base: "https://api.openweathermap.org/geo/1.0/"
 }
+
 
 function App() {
   const [query, setQuery] = useState('');
   const [weather, setWeather] = useState({});
   const [geoCode, setGeoCode] = useState({})
+
+  //USED TO SET DEFAULT CITY ON PAGE LOAD
+  useEffect(() => {
+    fetch(`${geoCodeApi.base}direct?q=romulus&limit=1&appid=${geoCodeApi.key}`)
+    .then(res => res.json())
+    .then(result => {
+      setGeoCode(result)
+      console.log(geoCode,result)
+      return fetch(`${weatherApi.base}onecall?lat=${result[0].lat}&lon=${result[0].lon}&units=imperial&appid=${weatherApi.key}`)
+    })
+    .then(res => res.json())
+    .then(result => {
+      setWeather(result)
+      setQuery('')
+      console.log(result)
+    });
+
+  },[])
 
 
   const search = evt => {
@@ -40,27 +60,6 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    fetch(`${geoCodeApi.base}direct?q=romulus&limit=1&appid=${geoCodeApi.key}`)
-      .then(res => res.json())
-      .then(result => {
-        setGeoCode(result)
-        console.log(geoCode)
-
-        return fetch(`${weatherApi.base}onecall?lat=${result[0].lat}&lon=${result[0].lon}&units=imperial&appid=${weatherApi.key}`)
-
-      })
-      .then(res => res.json())
-      .then(result => {
-        setWeather(result)
-        setQuery('')
-        console.log(result)
-        
-      });
-    
-  }, [])
-
-
 
 
   return (
@@ -75,7 +74,6 @@ function App() {
             placeholder='Enter City...'
             value={query}
             onChange={e => setQuery(e.target.value)}
-           
             onKeyUp={search}
             />
         </div>
@@ -88,12 +86,12 @@ function App() {
               <div className="date">{ DateBuilder(new Date()) }</div>
             </div>
             <div className='weatherBox'>
-            <div className='temp'>
-              {Math.round(weather.current.temp)}°F
-            </div>
-            <div className='weather '>
-              { weatherSet(weather.current.weather[0].main), weather.current.weather[0].main}
-            </div>
+              <div className='temp'>
+                {Math.round(weather.current.temp)}°F
+              </div>
+              <div className='weather '>
+                { weatherSet(weather.current.weather[0].main), weather.current.weather[0].main}
+              </div>
             </div>
           </div>
           }
@@ -137,11 +135,10 @@ function App() {
           </div>
             
           { weather.timezone && 
-          <div className=''>
+          <div>
             <div className="locationBox">
               <div className="location">{geoCode[0].name}, {geoCode[0].state} </div>
-                  <div className="date">{DateBuilder(new Date())}</div>
-
+              <div className="date">{DateBuilder(new Date())}</div>
             </div>
             <div className='weatherBox'>
               <div className='temp'>
@@ -156,20 +153,22 @@ function App() {
         </div>
           
         <div className='flex items-center'>
-            < Map lat={Number(weather.lat)} lng={ Number(weather.lon)}/>
+          < Map lat={Number(weather.lat)} lng={Number(weather.lon)} />
         </div>
- 
-        { weather.timezone && 
+          
+        {/* ITERATING OVER ARRAY AND SEPERATING  */}
+          {weather.timezone && 
+            
         <div className='flex justify-end'>
-          <ul>
-            {weather.daily.slice(1,7).map((day)=>{
-               return(
+              <ul>
                 
+              {weather.daily.slice(1, 7).map((day) => {
+              
+               return(
                 <div className='forcastSection px-1 py-2 items-center'>
-                  <li>
+                  <li >
                     <div className='forcastSection px-1 py-2 flex items-center'>{Math.round(day.temp.max)}°F</div>
-                     <div>{DateBuilder(new Date(day.dt * 1000))}</div>
-
+                    <div>{DateBuilder(new Date(day.dt * 1000))}</div>
                   </li>
                 </div>
                )

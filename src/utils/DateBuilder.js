@@ -1,4 +1,3 @@
-import React from "react"; 
 
 function DateBuilder(d) {
     let months = ['January','february','March','April','May','June','July','August','September','October','November','December'];

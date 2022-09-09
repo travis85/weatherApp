@@ -2,23 +2,23 @@ import React from 'react'
 import { GoogleMap, Marker, useLoadScript} from '@react-google-maps/api';
 
 
-export default function Map(props) {
+//PASSING DESTRUCTURED PROPS LAT ANND LNG
+export default function Map({lat, lng}) {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+    googleMapsApiKey: 'd21dbf4ec7c07da49bc079f1518d953d',
   })
-  
+  let center = {lat: lat, lng: lng}
 
-  const center = { lat: props.lat, lng: props.lng }
   if (!isLoaded) return <div>Loading...</div>
 
   return (
     <div className='map border-solid border-2 border-white'>
       <GoogleMap
-        zoom={5}
+        zoom={6}
         center={center}
         mapContainerStyle={{ width: "500px", height: "300px" }}>
-      
-        <Marker  position={center}/>
+    
+        <Marker position={center}/>
 
       </GoogleMap>
     </div>
