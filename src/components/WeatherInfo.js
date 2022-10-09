@@ -10,16 +10,19 @@ import Banner from './Banner';
 function App(props) {
   const [query, setQuery] = useState('');
   const [weather, setWeather] = useState({});
-  const [geoCode, setGeoCode] = useState({})
-const weatherApi = {
-  key: '9d31b566b7835cec15c8ffac25143073',//TODO ,env
-  base: "https://api.openweathermap.org/data/2.5/"
-}
+  const [geoCode, setGeoCode] = useState({});
+  const [bannerTemps, setBannerTemps] = useState({});
+  const [bannerWeatherTemps, setBannerWeatherTemps] = useState({});
 
-const geoCodeApi ={
-  key: '9d31b566b7835cec15c8ffac25143073',
-  base: "https://api.openweathermap.org/geo/1.0/"
-}
+  const weatherApi = {
+    key: 'd21dbf4ec7c07da49bc079f1518d953d',//TODO ,env
+    base: "https://api.openweathermap.org/data/2.5/"
+  }
+
+  const geoCodeApi ={
+    key: 'd21dbf4ec7c07da49bc079f1518d953d',
+    base: "https://api.openweathermap.org/geo/1.0/"
+  }
 
   
   //USED TO SET DEFAULT CITY ON PAGE LOAD
@@ -37,7 +40,6 @@ const geoCodeApi ={
       setQuery('')
       console.log(result)
     });
-
   },[])
 
 
@@ -47,20 +49,34 @@ const geoCodeApi ={
       .then(res => res.json())
       .then(result => {
         setGeoCode(result)
-        console.log(geoCode)
-
+        console.log(result)
         return fetch(`${weatherApi.base}onecall?lat=${result[0].lat}&lon=${result[0].lon}&units=imperial&appid=${weatherApi.key}`)
-
       })
       .then(res => res.json())
       .then(result => {
         setWeather(result)
         setQuery('')
         console.log(result)
-        
       });
     }
   }
+
+  const fetchTemp = (city) => {
+    fetch(`${geoCodeApi.base}direct?q=${city}&limit=1&appid=${geoCodeApi.key}`)
+    .then(res => res.json())
+    .then(result => {
+      // setBannerTemps(result)
+      console.log(result, 'fetchTemp')
+      return fetch(`${weatherApi.base}onecall?lat=${result[0].lat}&lon=${result[0].lon}&units=imperial&appid=${weatherApi.key}`)
+    })
+    .then(res => res.json())
+    .then(result => {
+    //   setBannerWeatherTemps(result)
+      console.log(result.current.temp, 'fecth weather')
+      return Math.round(result.current.temp)
+    });
+  }
+  
 
 
 
@@ -78,7 +94,7 @@ const geoCodeApi ={
             value={query}
             onChange={e => setQuery(e.target.value)}
             onKeyUp={search}
-            />
+          />
         </div>
 
         { weather.timezone && 
@@ -101,7 +117,7 @@ const geoCodeApi ={
           }
           </div>
           
-          { weather.timezone && 
+        { weather.timezone && 
         <div className=''>
           <ul>
             {weather.daily.slice(1,7).map((day)=>{
@@ -123,19 +139,18 @@ const geoCodeApi ={
 
 
       {/* DESKTOP VIEW */}
-        <Banner />
-        <main className='hidden md:grid grid-cols-3  '>
+        <Banner fetchTemp={fetchTemp} />
+      <main className='hidden md:grid grid-cols-3  '>
           
-           
         <div className='grid grid-cols-1 '>
            
           <div className="search-box ">
             <input type="text" 
-            className='search-bar ' 
-            placeholder='Enter City...'
-            onChange={e => setQuery(e.target.value)}
-            value={query}
-            onKeyUp={search}
+              className='search-bar ' 
+              placeholder='Enter City...'
+              onChange={e => setQuery(e.target.value)}
+              value={query}
+              onKeyUp={search}
             />
           </div>
             
@@ -158,7 +173,8 @@ const geoCodeApi ={
           }   
         </div>
           
-        <div className='flex items-center'>
+        {/* MAP DIV */}
+        <div className='flex items-center'> 
           < Map lat={Number(weather.lat)} lng={Number(weather.lon)} />
         </div>
           
@@ -183,7 +199,7 @@ const geoCodeApi ={
         </div>
         }     
       </main>
-        </div>
+      </div>
         
     </>
   );
