@@ -19,9 +19,7 @@ export default function SignIn() {
 
   const navigate = useNavigate()
   function propsToNextPage() {
-    console.log(user.uid,'here')
-    navigate('/WeatherInfo', { state: { uid: user.uid, userName: user.userName } })
-    
+    navigate('/WeatherInfo', { state: { uid: user.uid } })
   }
 
   function clearError() {
@@ -32,13 +30,11 @@ export default function SignIn() {
 
 
   function handleUserRecieved(user){
-    console.log(user)
-    
+    console.log(user, 'HANDLEUSER()-SIGNIN')
     setUser({
       email: user.email,
       uid: user.uid,
     })
-    
   }
   
   async function handleSignIn() {
