@@ -3,7 +3,7 @@ import Map from '../components/Map';
 import DateBuilder from '../utils/DateBuilder'
 import weatherSet from '../utils/weatherSet'
 import Banner from './Banner';
-
+// import GetWeatherInfo from './GetWeatherInfo';
 //https://openweathermap.org/api
 
 
@@ -11,9 +11,7 @@ function App(props) {
   const [query, setQuery] = useState('');
   const [weather, setWeather] = useState({});
   const [geoCode, setGeoCode] = useState({});
-  const [bannerTemps, setBannerTemps] = useState({});
-  const [bannerWeatherTemps, setBannerWeatherTemps] = useState({});
-
+  
   const weatherApi = {
     key: 'd21dbf4ec7c07da49bc079f1518d953d',//TODO ,env
     base: "https://api.openweathermap.org/data/2.5/"
@@ -49,31 +47,30 @@ function App(props) {
       .then(res => res.json())
       .then(result => {
         setGeoCode(result)
-        console.log(result)
+        
         return fetch(`${weatherApi.base}onecall?lat=${result[0].lat}&lon=${result[0].lon}&units=imperial&appid=${weatherApi.key}`)
       })
       .then(res => res.json())
       .then(result => {
         setWeather(result)
         setQuery('')
-        console.log(result)
+       
       });
     }
   }
 
-  const fetchTemp = (city) => {
+   function fetchTemp(city){
     fetch(`${geoCodeApi.base}direct?q=${city}&limit=1&appid=${geoCodeApi.key}`)
     .then(res => res.json())
     .then(result => {
-      // setBannerTemps(result)
       console.log(result, 'fetchTemp')
-      return fetch(`${weatherApi.base}onecall?lat=${result[0].lat}&lon=${result[0].lon}&units=imperial&appid=${weatherApi.key}`)
+      fetch(`${weatherApi.base}onecall?lat=${result[0].lat}&lon=${result[0].lon}&units=imperial&appid=${weatherApi.key}`)
     })
     .then(res => res.json())
     .then(result => {
-    //   setBannerWeatherTemps(result)
-      console.log(result.current.temp, 'fecth weather')
-      return Math.round(result.current.temp)
+      console.log(Math.round(result.current.temp), 'fecthTemp - WeatherInfo.js')
+        return Math.round(result.current.temp)
+      
     });
   }
   
@@ -139,7 +136,7 @@ function App(props) {
 
 
       {/* DESKTOP VIEW */}
-        <Banner fetchTemp={fetchTemp} />
+      <Banner fetchTemp={fetchTemp} />
       <main className='hidden md:grid grid-cols-3  '>
           
         <div className='grid grid-cols-1 '>
@@ -158,8 +155,8 @@ function App(props) {
           <div>
             <div className="locationBox">
               <div className="location">{geoCode[0].name}, {geoCode[0].state} </div>
-                  <div className="date">{DateBuilder(new Date())}</div>
-                  <div className="date">{new Date().toLocaleTimeString()}</div>
+                <div className="date">{DateBuilder(new Date())}</div>
+                <div className="date">{new Date().toLocaleTimeString()}</div>
             </div>
             <div className='weatherBox'>
               <div className='temp'>
@@ -188,7 +185,7 @@ function App(props) {
               
                return(
                 <div className='forcastSection px-1 py-2 items-center'>
-                  <li >
+                  <li>
                     <div className='forcastSection px-1 py-2 flex items-center'>{Math.round(day.temp.max)}°F</div>
                     <div>{DateBuilder(new Date(day.dt * 1000))}</div>
                   </li>
@@ -200,7 +197,6 @@ function App(props) {
         }     
       </main>
       </div>
-        
     </>
   );
 }
