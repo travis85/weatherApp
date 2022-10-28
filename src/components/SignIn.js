@@ -3,8 +3,7 @@ import React, { useState } from 'react'
 import Register from './Register'
 import { auth } from '../utils/firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-
-
+import backgroundImage from '../assets/allWeatherPic.jpeg'
 
 
 export default function SignIn() {
@@ -57,33 +56,44 @@ export default function SignIn() {
 
   return (
     <>
-      <div className='grid grid-cols-1 place-items-center md:mt-10 p-32  bg-gradient-to-t from-gray-600 to-blue-800 rounded'>
-        <input
-          className='bg-gray-400 border-white border-solid px-4 py-2 placeholder-white mb-2'
-          type='text'
-          placeholder='Email'
-          value={email}
-          onChange={updateEmail}>
-        </input>
-        
-        <input
-          className='bg-gray-400 border-white border-solid px-4 py-2  placeholder-white'
-          type='password'
-          placeholder='Password'
-          value={password}
-          onChange={updatePassword}>
-        </input>
-        
-        <button className='text-white hover:text-slate-400' onClick={() => (handleSignIn())}>Sign In</button>
-        
-        {!register &&
-          <button className='text-white hover:text-slate-400' onClick={() => showRegister(true)}>Register?</button>
-        }
-        {register &&
-          <Register />
-        }
-        <p className='text-red-500'>{ errorMessage }</p>
+      <main style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no - repeat',
+        backgroundSize: 'cover'
+      }}>
+      <div className='flex justify-center '>
+        <div className='grid grid-cols-1 place-items-center md:mt-10 p-32  bg-gradient-to-t from-gray-600 to-blue-800 rounded w-[50%] '>
+          <input
+            className='bg-gray-400 border-white border-solid px-4 py-2 placeholder-white mb-2'
+            type='text'
+            placeholder='Email'
+            value={email}
+            onChange={updateEmail}>
+          </input>
+          
+          <input
+            className='bg-gray-400 border-white border-solid px-4 py-2  placeholder-white'
+            type='password'
+            placeholder='Password'
+            value={password}
+            onChange={updatePassword}>
+          </input>
+          
+          <button className='text-white hover:text-slate-400' onClick={() => (handleSignIn())}>Sign In</button>
+          
+          {!register &&
+            <button className='text-white hover:text-slate-400' onClick={() => showRegister(true)}>Register?</button>
+          }
+          {register &&
+            <Register showRegister = {showRegister}/>
+          }
+          <p className='text-red-500'>{ errorMessage }</p>
+        </div>
       </div>
+    </main>
+      
+      
       {user.uid &&
         propsToNextPage() 
       }
